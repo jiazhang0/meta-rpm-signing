@@ -60,7 +60,7 @@ EXTRA_OPENSSL_SRC_URI = " \
 SRC_URI_append = " \
     file://rpm-key-import.service \
     file://rpm-key-import.sh \
-    ${@base_contains('PACKAGECONFIG', 'openssl', '${EXTRA_OPENSSL_SRC_URI}', '', d)} \
+    ${@bb.utils.contains('PACKAGECONFIG', 'openssl', '${EXTRA_OPENSSL_SRC_URI}', '', d)} \
 "
 
 SRC_URI_append_openssl-fips = "\
@@ -77,9 +77,9 @@ PACKAGECONFIG[fips] = ",,openssl-fips,"
 # When OpenSSL is selected, we use it as -the- crypto library
 PACKAGECONFIG[openssl] = "--with-openssl --with-usecrypto=openssl,--without-openssl,openssl,"
 
-OVERRIDES_prepend = "${@base_contains('PACKAGECONFIG', 'fips', 'openssl-fips:', '', d)}"
+OVERRIDES_prepend = "${@bb.utils.contains('PACKAGECONFIG', 'fips', 'openssl-fips:', '', d)}"
 
-DEPENDS += "${@base_contains('PACKAGECONFIG', 'fips', 'openssl-fips', '', d)}"
+DEPENDS += "${@bb.utils.contains('PACKAGECONFIG', 'fips', 'openssl-fips', '', d)}"
 
 export FIPS_SIG = "${STAGING_LIBDIR}/ssl/fips-2.0/bin/incore"
 export FIPSLD_CC = "${HOST_PREFIX}gcc ${HOST_CC_ARCH}${TOOLCHAIN_OPTIONS}"
